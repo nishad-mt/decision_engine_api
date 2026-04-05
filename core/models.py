@@ -7,6 +7,8 @@ CATEGORY_CHOICES = [
     ('career', 'Career'),
     ('fun', 'Fun'),
     ('social', 'Social'),
+    ('finance', 'Finance'),
+    ('growth', 'Growth'),
 ]
 
 

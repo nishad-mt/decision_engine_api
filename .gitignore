@@ -8,8 +8,8 @@ __pycache__/
 # Environment variables
 .env
 
-# Database
-db.sqlite3
+decision-ui/node_modules/
+decision-ui/build/
 
 # VS Code
 .vscode/

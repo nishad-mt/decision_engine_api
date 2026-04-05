@@ -43,7 +43,6 @@ class DecisionViewSet(ModelViewSet):
             ]
         )
 
-        # 🔹 Handle weights
         if custom_weights_provided:
             base_weights = normalize([
                 data['importance_weight'],
@@ -56,8 +55,6 @@ class DecisionViewSet(ModelViewSet):
                 data['time_weight'],
                 data['priority_weight']
             ])
-
-            final_weights = [0.5, 0.5]
 
         else:
             weights = WeightConfig.objects.order_by('-created_at').first()
@@ -80,22 +77,37 @@ class DecisionViewSet(ModelViewSet):
                 weights.priority
             ])
 
-            final_weights = [
-                weights.base_weight,
-                weights.context_weight
-            ]
+        energy = user_data['energy']
+        time_available = user_data['time_available']
+
+        if energy < 4 or time_available < 4:
+            # constrained → feasibility matters more
+            final_weights = [0.3, 0.7]
+
+        elif energy > 7 and time_available > 7:
+            # free → quality matters more
+            final_weights = [0.7, 0.3]
+
+        else:
+            # balanced
+            final_weights = [0.5, 0.5]
 
         weights_tuple = (base_weights, context_weights, final_weights)
 
-        ranked = rank_options(decision, user_data, weights_tuple)
+
+        ranked, confidence = rank_options(
+            decision,
+            user_data,
+            weights_tuple
+        )
 
         return Response({
             "decision": decision.title,
             "best_option": ranked[0],
+            "confidence": confidence,
             "all_options": ranked
         })
-
-
+    
 class OptionViewSet(ModelViewSet):
     queryset = Option.objects.all()
     serializer_class = OptionSerializer
