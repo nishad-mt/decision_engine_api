@@ -22,6 +22,7 @@ class DecisionViewSet(ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+       
         serializer = EvaluationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
@@ -32,6 +33,7 @@ class DecisionViewSet(ModelViewSet):
             "priority": data['priority']
         }
 
+      
         custom_weights_provided = all(
             data.get(field) is not None for field in [
                 'importance_weight',
@@ -80,21 +82,27 @@ class DecisionViewSet(ModelViewSet):
         energy = user_data['energy']
         time_available = user_data['time_available']
 
+        # IMPORTANT:
+        # [benefit_weight, cost_weight, context_weight]
+
         if energy < 4 or time_available < 4:
-            # constrained → feasibility matters more
-            final_weights = [0.3, 0.7]
+            # constrained = feasibility matters more
+            final_weights = [0.3, 0.4, 0.3]
 
         elif energy > 7 and time_available > 7:
-            # free → quality matters more
-            final_weights = [0.7, 0.3]
+            # free = long-term benefit matters more
+            final_weights = [0.6, 0.2, 0.2]
 
         else:
             # balanced
-            final_weights = [0.5, 0.5]
+            final_weights = [0.5, 0.3, 0.2]
+
+        # normalize final weights (important)
+        final_weights = normalize(final_weights)
 
         weights_tuple = (base_weights, context_weights, final_weights)
 
-
+       
         ranked, confidence = rank_options(
             decision,
             user_data,
@@ -106,8 +114,7 @@ class DecisionViewSet(ModelViewSet):
             "best_option": ranked[0],
             "confidence": confidence,
             "all_options": ranked
-        })
-    
+        })   
 class OptionViewSet(ModelViewSet):
     queryset = Option.objects.all()
     serializer_class = OptionSerializer

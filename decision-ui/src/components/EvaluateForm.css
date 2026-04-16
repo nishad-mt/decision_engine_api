@@ -1,0 +1,63 @@
+.eval-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.eval-form {
+  width: 500px;
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.eval-form h2 {
+  margin-bottom: 20px;
+}
+
+.slider-group {
+  margin-bottom: 20px;
+}
+
+.slider-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.slider-group input {
+  width: 100%;
+}
+
+.select-group {
+  margin-bottom: 20px;
+}
+
+.select-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.select-group select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.eval-btn {
+  width: 100%;
+  padding: 12px;
+  background: #22c55e;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.eval-btn:hover {
+  background: #16a34a;
+}

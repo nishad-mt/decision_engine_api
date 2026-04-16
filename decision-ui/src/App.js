@@ -1,25 +1,15 @@
-import { useState } from "react";
-import DecisionForm from "./components/DecisionForm";
-import EvaluateForm from "./components/EvaluateForm";
-import ResultCard from "./components/ResultCard";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LandingPage from "./pages/LandingPage";
+import DecisionPage from "./pages/DecisionPage";
 
 function App() {
-  const [decisionId, setDecisionId] = useState(null);
-  const [result, setResult] = useState(null);
-
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Decision Engine</h1>
-
-      {!decisionId ? (
-        <DecisionForm onCreated={setDecisionId} />
-      ) : (
-        <>
-          <EvaluateForm decisionId={decisionId} onResult={setResult} />
-          <ResultCard result={result} />
-        </>
-      )}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/decisions" element={<DecisionPage />} />
+      </Routes>
+    </Router>
   );
 }
 
